@@ -1,0 +1,23 @@
+{
+  "header": [
+    ["contactTitle", "Botão de contato · título", ".header-cta strong"],
+    ["contactSubtitle", "Botão de contato · chamada", ".header-cta small"],
+    ["mobileContact", "Botão de contato do menu móvel", ".mobile-menu-cta [data-pt]"],
+    ["homeLabel", "Menu · Início", "#main-nav > a[href='index.html'] [data-pt]"],
+    ["catalogLabel", "Menu · Serviços e produtos", "#main-nav > a[href='produtos.html'] [data-pt]"],
+    ["processLabel", "Menu · Como trabalhamos", "#main-nav > a[href='como-trabalhamos.html'] [data-pt]"],
+    ["oxilifeLabel", "Menu · OxiLife Fish", "#main-nav > a[href='oxilife-fish.html'] [data-pt]"],
+    ["contactLabel", "Menu · Contato", "#main-nav > a[href='contato.html'] [data-pt]"]
+  ],
+  "footer": [
+    ["description", "Descrição da empresa", ".footer-grid > div:first-child > p [data-pt]"],
+    ["navigationTitle", "Título da coluna de links", ".footer-grid nav h2 [data-pt]"],
+    ["contactTitle", "Título da coluna de contato", ".footer-grid > div:last-child h2 [data-pt]"],
+    ["oxilifeLabel", "Chamada para conhecer a OxiLife", ".footer-socials a[href='oxilife-fish.html'] [data-pt]"],
+    ["homeLabel", "Links · Início", ".footer-grid nav a[href='index.html'] [data-pt]"],
+    ["catalogLabel", "Links · Serviços e produtos", ".footer-grid nav a[href='produtos.html'] [data-pt]"],
+    ["processLabel", "Links · Como trabalhamos", ".footer-grid nav a[href='como-trabalhamos.html'] [data-pt]"],
+    ["oxilifeNavLabel", "Links · OxiLife Fish", ".footer-grid nav a[href='oxilife-fish.html'] [data-pt]"],
+    ["contactLabel", "Links · Contato", ".footer-grid nav a[href='contato.html'] [data-pt]"]
+  ]
+}

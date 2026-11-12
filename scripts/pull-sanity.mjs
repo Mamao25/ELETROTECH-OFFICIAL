@@ -13,30 +13,14 @@ if (!/^[a-z0-9-]{5,32}$/.test(projectId) || !/^[a-z0-9][a-z0-9_-]*$/.test(datase
   throw Error('Confira o Project ID e o dataset em studio/project.json.');
 }
 
-const query = `{
-  "products": *[_type == "product"] | order(order asc, _id asc) {
-    _id, id, "slug": slug.current, active, order, featured, name, nameEs, category,
-    brand, model, sku, description, descriptionEs, details, detailsEs, src, alt, illustration,
-    gallery, "imageUrl": image.asset->url, "galleryUrls": galleryImages[].asset->url,
-    price, salePrice, stock, lowStock, variations,
-    specifications[]{label, value, labelEs, valueEs}, seoTitle, seoDescription
-  },
-  "site": *[_type == "siteSettings" && _id == "site-settings"][0] {
-    name, url, whatsapp, email, phone, phoneLabel, instagram, instagramLabel,
-    logoSrc, "logoUrl": logo.asset->url, footerPt, footerEs, businessHours,
-    businessHoursEs, footerStart, footerEnd
-  },
-  "pages": *[_type == "sitePage"] | order(_id asc) {
-    _id, showInMenu, menuTitle, menuTitleEs,
-    sections[]{_key, key, title, enabled}, texts[]{_key, key, label, pt, es}, links[]{_key, key, label, href, whatsappTopic},
-    images[]{_key, key, label, src, altPt, altEs, "imageUrl": image.asset->url},
-    videos[]{_key, key, label, src, poster, enabled, loop, playbackRate,
-      "videoUrl": file.asset->url, "posterUrl": posterImage.asset->url}
-  },
-  "services": *[_type == "service"] | order(order asc, _id asc) {
-    _id, serviceId, name, nameEs, description, descriptionEs, active, showOnHome, order, category,
-    src, alt, whatsappTopic, note, noteEs, icon, "imageUrl": image.asset->url
-  }
+const query = `*[_type == "sitePage" && _id == "page-home"][0]{
+    sections[]{key, title, enabled}, texts[]{key, label, pt, es}, links[]{key, label, href, whatsappTopic},
+    images[]{key, label, src, altPt, altEs, "imageUrl": image.asset->url},
+    videos[]{key, label, src, poster, enabled, loop, playbackRate,
+      "videoUrl": file.asset->url, "posterUrl": posterImage.asset->url},
+    header{..., "logoUrl": logo.asset->url},
+    footer{..., "logoUrl": logo.asset->url},
+    homeServices{paineis{..., "imageUrl": image.asset->url}, automacao{..., "imageUrl": image.asset->url}, instalacoes{..., "imageUrl": image.asset->url}}
 }`;
 const url = new URL(`https://${projectId}.api.sanity.io/v2025-02-19/data/query/${dataset}`);
 url.searchParams.set('perspective', 'published');
@@ -47,11 +31,8 @@ if (!response.ok) {
 }
 const {result} = await response.json();
 const {pages: localPages} = await read('data/pages.json');
-const {schemaVersion} = await read('data/products.json');
-const siteDefaults = await read('data/site-defaults.json');
-if (!result?.site || !result.products?.length || !result.services?.length ||
-    !localPages.every(page => result.pages?.some(item => item._id === `page-${page.pageId}`))) {
-  throw Error('A carga inicial está incompleta. Importe os dados pelo procedimento do README antes de publicar.');
+if (!result || !localPages.some(page => page.pageId === 'home')) {
+  throw Error('A página Início ainda não está publicada no Sanity.');
 }
 
 async function download(source, kind = 'image') {
@@ -93,37 +74,28 @@ async function mapImage({imageUrl, ...item}) {
   return item;
 }
 
-const products = [];
-for (const {galleryUrls, ...document} of result.products) {
-  const product = await mapImage(document);
-  product.gallery = [...(product.gallery ?? [])];
-  for (const asset of (galleryUrls ?? []).filter(Boolean)) product.gallery.push(await download(asset));
-  product.variations ??= [];
-  product.specifications ??= [];
-  product.order ??= 0;
-  products.push(product);
+const {images, videos, header, footer, homeServices, ...page} = result;
+const home = {...localPages.find(item => item.pageId === 'home'), ...page, images: [], videos: []};
+for (const item of images ?? []) home.images.push(await mapImage(item));
+for (const {videoUrl, posterUrl, ...video} of videos ?? []) {
+  if (videoUrl) video.src = await download(videoUrl, 'video');
+  if (posterUrl) video.poster = await download(posterUrl);
+  home.videos.push(video);
 }
-
-const pages = [];
-for (const local of localPages) {
-  const {_id, images, videos, ...page} = result.pages.find(item => item._id === `page-${local.pageId}`);
-  const merged = {...local, ...page, images: [], videos: []};
-  for (const item of images ?? []) merged.images.push(await mapImage(item));
-  for (const {videoUrl, posterUrl, ...video} of videos ?? []) {
-    if (videoUrl) video.src = await download(videoUrl, 'video');
-    if (posterUrl) video.poster = await download(posterUrl);
-    merged.videos.push(video);
+for (const [key, value] of Object.entries({header, footer})) {
+  if (!value) continue;
+  const {logo, logoUrl, ...fields} = value;
+  if (logoUrl) fields.logoSrc = await download(logoUrl);
+  home[key] = fields;
+}
+if (homeServices) {
+  home.homeServices = {};
+  for (const [key, value] of Object.entries(homeServices)) {
+    if (!value || key.startsWith('_')) continue;
+    const {image, ...fields} = value;
+    home.homeServices[key] = await mapImage(fields);
   }
-  pages.push(merged);
 }
-
-const services = [];
-for (const document of result.services) services.push(await mapImage(document));
-const {logoUrl, ...settings} = result.site;
-const site = {...siteDefaults, ...Object.fromEntries(Object.entries(settings).filter(([, value]) => value != null))};
-if (logoUrl) site.logoSrc = await download(logoUrl);
-
-for (const [name, content] of Object.entries({products: {schemaVersion, products}, site, pages: {pages}, services: {services}})) {
-  await writeFile(resolve(root, `data/${name}.json`), JSON.stringify(content, null, 2) + '\n');
-}
-console.log(`Conteúdo publicado no Sanity recebido: ${products.length} produtos, ${pages.length} páginas e ${services.length} serviços.`);
+const pages = localPages.map(item => item.pageId === 'home' ? home : item);
+await writeFile(resolve(root, 'data/pages.json'), JSON.stringify({pages}, null, 2) + '\n');
+console.log('Página Início sincronizada com o Sanity.');

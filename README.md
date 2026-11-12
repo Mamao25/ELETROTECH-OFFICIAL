@@ -30,6 +30,8 @@ CSS, JavaScript, imagens e vídeos permanecem em css/, js/, images/, assets/ e v
 
 O [Painel Eletrotech](https://eletrotech-official.sanity.studio/) está hospedado no Sanity e usa o projeto `lwmn9kat` com o dataset `production`.
 
+O painel sincroniza somente a página **Início**. Abra **Página Início** e use as abas **Cabeçalho**, **Textos**, **Fotos e vídeo**, **Cards de serviços**, **Links e botões** e **Rodapé**. Nas listas de conteúdo, o seletor **Parte da página** ajuda a localizar cada campo. O restante do site usa os dados locais.
+
 ### Conectar pela primeira vez
 
 1. Em [Sanity Manage](https://www.sanity.io/manage), crie o projeto Eletrotech na sua conta e um dataset público chamado `production`. Esse dataset contém o conteúdo público do site.
@@ -48,9 +50,7 @@ Abra http://localhost:3333. Se o Studio solicitar CORS, adicione essa origem com
 
 ### Testar e publicar
 
-No Studio, abra **Editar pelo site** para navegar pela versão publicada e clicar em textos, imagens e links editáveis. Na home, **Editar fundo do banner** abre o campo do vídeo. As alterações aparecem nessa prévia depois que o GitHub Pages publica a nova versão.
-
-Na pasta principal, rode `npm ci`, `npm run sanity:pull`, `npm run build` e `npm run dev`. O comando de sincronização atualiza os JSON locais para a prévia. Use os dados importados e edite o conteúdo pelo Studio. Use **Publicar** no Studio para enviar a versão pública. Preserve os slugs já publicados e desative produtos que saírem do catálogo.
+Na pasta principal, rode `npm ci`, `npm run sanity:pull`, `npm run build` e `npm run dev`. O comando de sincronização atualiza o conteúdo da página Início para a prévia. Use **Publicar** no Studio para enviar a versão pública.
 
 Para disponibilizar o painel online, execute `npm run deploy` na pasta `studio` após fazer login no Sanity CLI. O Studio exige acesso de editor ao projeto.
 

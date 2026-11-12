@@ -8,5 +8,3 @@ node_modules/
 studio/.sanity/
 studio/dist/
 studio/initial-content.ndjson
-js/site-editor.bundle.js
-js/site-editor.bundle.css
