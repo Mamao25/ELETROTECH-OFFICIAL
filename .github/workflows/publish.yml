@@ -1,0 +1,66 @@
+name: Publicar site
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.content.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Instalar dependencias do renderizador
+        run: npm ci
+      - name: Buscar conteúdo publicado no Sanity
+        run: npm run sanity:pull
+      - name: Verificar mudanças e preservar URLs já publicadas
+        id: content
+        env:
+          PUBLISHED_SITE_URL: https://mamao25.github.io/ELETROTECH-OFFICIAL/
+          FORCE_PUBLISH: ${{ github.event_name != 'schedule' }}
+        run: node scripts/check-publication.mjs
+      - name: Renderizar paginas e servicos locais
+        if: steps.content.outputs.changed == 'true'
+        run: node scripts/render-content.mjs
+      - name: Gerar catálogo, páginas individuais e sitemap
+        if: steps.content.outputs.changed == 'true'
+        run: node scripts/build-products.mjs
+      - name: Validar publicação e URLs estáveis
+        if: steps.content.outputs.changed == 'true'
+        run: npm test
+      - name: Validar HTML e links locais
+        if: steps.content.outputs.changed == 'true'
+        shell: pwsh
+        run: ./qa/scripts/static-review.ps1
+      - name: Preparar arquivos públicos
+        if: steps.content.outputs.changed == 'true'
+        run: node scripts/prepare-site.mjs
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.content.outputs.changed == 'true'
+        with:
+          path: _site
+  deploy:
+    needs: build
+    if: needs.build.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

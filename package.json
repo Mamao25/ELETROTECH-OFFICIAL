@@ -1,0 +1,18 @@
+{
+  "name": "eletrotech-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/render-content.mjs && node scripts/build-products.mjs && node scripts/prepare-site.mjs",
+    "test": "node --test qa/scripts/test-publication.mjs qa/scripts/test-content.mjs qa/scripts/test-package.mjs",
+    "content:render": "node scripts/render-content.mjs",
+    "sanity:pull": "node scripts/pull-sanity.mjs"
+  },
+  "devDependencies": {
+    "cheerio": "^1.1.2"
+  }
+}

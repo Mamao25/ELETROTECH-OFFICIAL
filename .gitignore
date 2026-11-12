@@ -1,0 +1,10 @@
+qa/temp/
+dist/*.zip
+_site/
+node_modules/
+.env
+.env.*
+
+studio/.sanity/
+studio/dist/
+studio/initial-content.ndjson
