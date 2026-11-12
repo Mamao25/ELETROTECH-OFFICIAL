@@ -24,11 +24,21 @@ for(const folder of ['css','js']){
     revisions.set(path,createHash('sha256').update(await readFile(resolve(output,path))).digest('hex').slice(0,12));
   }
 }
+const editorFiles = ['js/site-editor.js', 'js/site-editor.bundle.js', 'js/site-editor.bundle.css'];
+const hasEditor = editorFiles.every(file => revisions.has(file));
+if (hasEditor) {
+  const digest = createHash('sha256').update(editorFiles.map(file => revisions.get(file)).join(''));
+  revisions.set('js/site-editor.js', digest.digest('hex').slice(0, 12));
+}
 for(const folder of ['','produtos']){
   for(const file of await readdir(resolve(output,folder))){
     if(!file.endsWith('.html'))continue;
     const path=resolve(output,folder,file);
-    const html=await readFile(path,'utf8');
+    let html=await readFile(path,'utf8');
+    if (hasEditor) {
+      const prefix = folder ? '../' : '';
+      html = html.replace('</head>', `<script type="module" src="${prefix}js/site-editor.js"></script></head>`);
+    }
     const versioned=html.replace(/((?:href|src)=")((?:\.\.\/)?(?:css|js)\/[^"?#]+\.(?:css|js))(?:\?v=[^"\s]*)?(")/g,(match,before,asset,after)=>{
       const revision=revisions.get(asset.replace(/^\.\.\//,''));
       if(!revision)throw Error('Arquivo de interface ausente: '+asset);

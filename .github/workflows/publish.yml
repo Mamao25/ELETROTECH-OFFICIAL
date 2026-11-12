@@ -45,7 +45,9 @@ jobs:
         run: ./qa/scripts/static-review.ps1
       - name: Preparar arquivos públicos
         if: steps.content.outputs.changed == 'true'
-        run: node scripts/prepare-site.mjs
+        run: |
+          npm run build:editor
+          node scripts/prepare-site.mjs
       - uses: actions/upload-pages-artifact@v3
         if: steps.content.outputs.changed == 'true'
         with:

@@ -15,7 +15,7 @@ if (!/^[a-z0-9-]{5,32}$/.test(projectId) || !/^[a-z0-9][a-z0-9_-]*$/.test(datase
 
 const query = `{
   "products": *[_type == "product"] | order(order asc, _id asc) {
-    id, "slug": slug.current, active, order, featured, name, nameEs, category,
+    _id, id, "slug": slug.current, active, order, featured, name, nameEs, category,
     brand, model, sku, description, descriptionEs, details, detailsEs, src, alt, illustration,
     gallery, "imageUrl": image.asset->url, "galleryUrls": galleryImages[].asset->url,
     price, salePrice, stock, lowStock, variations,
@@ -28,13 +28,13 @@ const query = `{
   },
   "pages": *[_type == "sitePage"] | order(_id asc) {
     _id, showInMenu, menuTitle, menuTitleEs,
-    sections[]{key, title, enabled}, texts[]{key, label, pt, es}, links[]{key, label, href, whatsappTopic},
-    images[]{key, label, src, altPt, altEs, "imageUrl": image.asset->url},
-    videos[]{key, label, src, poster, enabled, loop, playbackRate,
+    sections[]{_key, key, title, enabled}, texts[]{_key, key, label, pt, es}, links[]{_key, key, label, href, whatsappTopic},
+    images[]{_key, key, label, src, altPt, altEs, "imageUrl": image.asset->url},
+    videos[]{_key, key, label, src, poster, enabled, loop, playbackRate,
       "videoUrl": file.asset->url, "posterUrl": posterImage.asset->url}
   },
   "services": *[_type == "service"] | order(order asc, _id asc) {
-    serviceId, name, nameEs, description, descriptionEs, active, showOnHome, order, category,
+    _id, serviceId, name, nameEs, description, descriptionEs, active, showOnHome, order, category,
     src, alt, whatsappTopic, note, noteEs, icon, "imageUrl": image.asset->url
   }
 }`;

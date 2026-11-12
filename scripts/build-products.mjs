@@ -38,7 +38,7 @@ const canonical=p=>new URL(link(p),base).href;
 const money=value=>Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const price=p=>p.price==null?tr('Sob consulta','Bajo consulta'):`${p.salePrice!=null?`<del>${money(p.price)}</del> `:''}<span>${money(p.salePrice??p.price)}</span>`;
 function card(p){return `
-            <article class="product-card product-card--showcase" data-category="${p.category}" data-product-id="${p.id}">
+            <article class="product-card product-card--showcase" data-category="${p.category}" data-product-id="${p.id}" data-cms-product="${escape(p._id || p.id)}">
               <a class="product-image" href="${link(p)}" aria-label="${escape(p.name)}">
                 <img src="${escape(p.src)}" alt="${escape(p.alt||p.name)}" width="800" height="700" loading="lazy" decoding="async">
                 ${p.illustration?`<span class="illustration-label">${tr('Ilustração','Ilustración')}</span>`:''}
@@ -99,7 +99,7 @@ function detail(p){
   const related=active.filter(item=>item.id!==p.id&&item.category===p.category);
   const suggestions=(related.length?related:active.filter(item=>item.id!==p.id)).slice(0,3);
   return `
-  <section class="product-detail section">
+  <section class="product-detail section" data-cms-product="${escape(p._id || p.id)}">
     <div class="wrap">
       <nav class="breadcrumb" aria-label="Caminho da página"><a href="index.html">${tr('Início','Inicio')}</a><span aria-hidden="true">/</span><a href="produtos.html">${tr('Serviços e produtos','Servicios y productos')}</a><span aria-hidden="true">/</span><span aria-current="page">${tr(p.name,p.nameEs)}</span></nav>
       <div class="product-detail-grid">

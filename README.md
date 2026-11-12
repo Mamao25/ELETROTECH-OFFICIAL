@@ -48,6 +48,8 @@ Abra http://localhost:3333. Se o Studio solicitar CORS, adicione essa origem com
 
 ### Testar e publicar
 
+No Studio, abra **Editar pelo site** para navegar pela versão publicada e clicar em textos, imagens e links editáveis. Na home, **Editar fundo do banner** abre o campo do vídeo. As alterações aparecem nessa prévia depois que o GitHub Pages publica a nova versão.
+
 Na pasta principal, rode `npm ci`, `npm run sanity:pull`, `npm run build` e `npm run dev`. O comando de sincronização atualiza os JSON locais para a prévia. Use os dados importados e edite o conteúdo pelo Studio. Use **Publicar** no Studio para enviar a versão pública. Preserve os slugs já publicados e desative produtos que saírem do catálogo.
 
 Para disponibilizar o painel online, execute `npm run deploy` na pasta `studio` após fazer login no Sanity CLI. O Studio exige acesso de editor ao projeto.

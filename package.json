@@ -7,12 +7,15 @@
   },
   "scripts": {
     "dev": "node scripts/serve.mjs",
-    "build": "node scripts/render-content.mjs && node scripts/build-products.mjs && node scripts/prepare-site.mjs",
+    "build": "node scripts/render-content.mjs && node scripts/build-products.mjs && npm run build:editor && node scripts/prepare-site.mjs",
+    "build:editor": "esbuild scripts/site-editor.mjs --bundle --format=esm --minify --outfile=js/site-editor.bundle.js",
     "test": "node --test qa/scripts/test-publication.mjs qa/scripts/test-content.mjs qa/scripts/test-package.mjs",
     "content:render": "node scripts/render-content.mjs",
     "sanity:pull": "node scripts/pull-sanity.mjs"
   },
   "devDependencies": {
-    "cheerio": "^1.1.2"
+    "@sanity/visual-editing": "^6.2.0",
+    "cheerio": "^1.1.2",
+    "esbuild": "^0.28.2"
   }
 }

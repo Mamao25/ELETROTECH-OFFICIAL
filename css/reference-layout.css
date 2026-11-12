@@ -458,3 +458,16 @@ body.combined-page .service-content { padding: 18px 20px; }
 @media(max-width:1000px) { body.combined-page .services-catalog .section-heading { grid-template-columns: 1fr; gap: 16px; } }
 @media(max-width:640px) { body.combined-page main>.page-intro>.wrap,body.combined-page .combined-navigation>.wrap,body.combined-page .services-catalog>.wrap,body.combined-page .combined-catalog>.wrap { width: calc(100% - 40px); } body.combined-page .intro-layout { grid-template-columns: 1fr; gap: 24px; } body.combined-page .intro-visual img { height: 260px; } body.combined-page .combined-section-link { gap: 8px; } body.combined-page .combined-section-link svg { width: 17px; height: 17px; } }
 [hidden] { display: none !important; }
+
+.site-editor-banner {
+  position: absolute;
+  z-index: 4;
+  inset: auto 1rem 3rem auto;
+  padding: .65rem 1rem;
+  border: 1px solid #1265bb;
+  border-radius: .5rem;
+  background: #fff;
+  color: #082b51;
+  font: inherit;
+  cursor: pointer;
+}
