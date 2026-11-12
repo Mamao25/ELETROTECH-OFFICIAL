@@ -9,6 +9,11 @@
     ["oxilifeLabel", "Menu · OxiLife Fish", "#main-nav > a[href='oxilife-fish.html'] [data-pt]"],
     ["contactLabel", "Menu · Contato", "#main-nav > a[href='contato.html'] [data-pt]"]
   ],
+  "equipment": [
+    ["motorLabel", "Motores Hércules · Rótulo acima do título", ".category-card:has([data-cms-image='image-001']) .equipment-label"],
+    ["zagonelLabel", "Linha Zagonel · Rótulo acima do título", ".category-card:has([data-cms-image='image-002']) .equipment-label"],
+    ["materialsLabel", "Materiais elétricos · Rótulo acima do título", ".category-card:has([data-cms-image='image-003']) .equipment-label"]
+  ],
   "footer": [
     ["description", "Descrição da empresa", ".footer-grid > div:first-child > p [data-pt]"],
     ["navigationTitle", "Título da coluna de links", ".footer-grid nav h2 [data-pt]"],

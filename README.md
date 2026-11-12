@@ -30,7 +30,7 @@ CSS, JavaScript, imagens e vídeos permanecem em css/, js/, images/, assets/ e v
 
 O [Painel Eletrotech](https://eletrotech-official.sanity.studio/) está hospedado no Sanity e usa o projeto `lwmn9kat` com o dataset `production`.
 
-O painel sincroniza somente a página **Início**. Abra **Página Início** e use as abas **Cabeçalho**, **Textos**, **Fotos e vídeo**, **Cards de serviços**, **Links e botões** e **Rodapé**. Nas listas de conteúdo, o seletor **Parte da página** ajuda a localizar cada campo. O restante do site usa os dados locais.
+O painel sincroniza somente a página **Início**. As abas **Serviços ELETROTECH**, **Equipamentos Eletrotech** e **INICIO OXIFISH** reúnem fotos e textos dos respectivos trechos. Em **Textos em geral**, use **Parte da página** para localizar frases do banner, do processo e da chamada para contato. Cabeçalho, vídeo do banner, links gerais e rodapé têm abas próprias.
 
 ### Conectar pela primeira vez
 

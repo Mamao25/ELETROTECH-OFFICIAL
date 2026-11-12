@@ -20,6 +20,7 @@ const query = `*[_type == "sitePage" && _id == "page-home"][0]{
       "videoUrl": file.asset->url, "posterUrl": posterImage.asset->url},
     header{..., "logoUrl": logo.asset->url},
     footer{..., "logoUrl": logo.asset->url},
+    equipment{motorLabel,motorLabelEs,zagonelLabel,zagonelLabelEs,materialsLabel,materialsLabelEs},
     homeServices{paineis{..., "imageUrl": image.asset->url}, automacao{..., "imageUrl": image.asset->url}, instalacoes{..., "imageUrl": image.asset->url}}
 }`;
 const url = new URL(`https://${projectId}.api.sanity.io/v2025-02-19/data/query/${dataset}`);

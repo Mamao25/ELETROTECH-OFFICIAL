@@ -83,7 +83,9 @@ export function renderPage(template,page,site,{services=[],icons={},defaults={},
       body.append($('<p class="service-description">').append(tr($,service.description,service.descriptionEs)));
       const action=$('<div class="service-card-action">');
       const link=$('<a class="service-quote" target="_blank" rel="noopener noreferrer">').attr('data-whatsapp',service.whatsappTopic||service.name).attr('href',`https://wa.me/${site.whatsapp}`);
-      link.append(tr($,'Solicitar orçamento','Solicitar presupuesto'),$('<svg class="service-quote-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>'));
+      const buttonText = home ? service.buttonText : undefined;
+      const buttonTextEs = home ? service.buttonTextEs : undefined;
+      link.append(tr($,buttonText || 'Solicitar orçamento',buttonTextEs || buttonText || 'Solicitar presupuesto'),$('<svg class="service-quote-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>'));
       action.append(link);body.append(action);
       card.append(body);grid.append(card);
     }
@@ -130,7 +132,7 @@ export function renderPage(template,page,site,{services=[],icons={},defaults={},
           node.text(portuguese);
         });
       }
-      if (content.logoSrc) {
+      if (content.logoSrc && (area === 'header' || area === 'footer')) {
         $(area === 'header' ? '.brand img' : '.footer-brand img').attr('src', localMedia(content.logoSrc));
       }
     }
